@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Index6";
+}
+
+<h1>Datos del ViewBag</h1>
+<br />
+<h2>@ViewBag.saludo</h2>
+<h2>@ViewBag.fecha</h2>
+<br />
+<br />
+<h1>Datos del ViewData</h1>
+<br />
+<h2>@ViewData["Nombre"]</h2>
+<br />
+<br />
+<h1>Datos del TempData</h1>
+<br />
+<h2>@ViewData["nombreNuevo"]</h2>
+
+@Html.ActionLink("Ruta nueva en el mismo controlador", "Index")
+<br />
+@Html.ActionLink("Ruta nueva en otro controlador", "Index", "Home", null, new {miAtributo="valor", @class="btn btn-danger"})
+

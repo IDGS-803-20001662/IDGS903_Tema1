@@ -1,0 +1,60 @@
+﻿@model IDGS903_Tema1.Models.Diccionario
+
+@{
+    ViewBag.Title = "Traducir";
+}
+
+<h2 class="text-primary">Traducir</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Palabra, htmlAttributes: new { @class = "control-label col-md-2 m-2 h4" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Palabra, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Palabra, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        @Html.LabelFor(model => model.Idioma, htmlAttributes: new { @class = "control-label col-md-2 h4" })
+        <div class="col-md-10">
+            <div>
+                <label>
+                    @Html.RadioButtonFor(model => model.Idioma, "Ing", new { @class = "form-check-input" })
+                    Ing
+                </label>
+                <br />
+                <label>
+                    @Html.RadioButtonFor(model => model.Idioma, "Esp", new { @class = "form-check-input" })
+                    Esp
+                </label>
+                @Html.ValidationMessageFor(model => model.Idioma, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Traducir" class="btn btn-primary m-3" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Traduccion, htmlAttributes: new { @class = "control-label col-md-2 mt-2 h4 ml-2 text-success" })
+        <div class="col-md-10">
+            <h1>@Html.DisplayFor(model => model.Traduccion)</h1>
+        </div>
+    </div>
+
+</div>
+}
+<br />
+<div>
+    @Html.ActionLink("Agregar más palabras", "RegistrarPalabras")
+</div>

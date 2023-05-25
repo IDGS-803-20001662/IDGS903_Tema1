@@ -1,0 +1,107 @@
+﻿@model IDGS903_Tema1.Models.Diccionario
+
+@{
+    ViewBag.Title = "Registrar Palabras";
+}
+
+<h2 class="text-primary">RegistrarPalabras</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ingles, htmlAttributes: new { @class = "control-label col-md-2 m-2 h4" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ingles, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Ingles, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Espanol, htmlAttributes: new { @class = "control-label col-md-2 m-2 h4" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Espanol, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Espanol, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Agregar Traducción" class="btn btn-success m-3" />
+                <input type="button" value="Mostrar" class="btn btn-primary m-3" name="mostrar" id="mostrar" onclick="mostrarTabla()" />
+                <input type="button" value="Ocultar" class="btn btn-primary m-3" name="ocultar" id="ocultar" onclick="ocultarTabla()" style="display: none;" />
+            </div>
+        </div>
+    </div>
+}
+<br />
+<div id="container" style="display: none;">
+    <h3>Diccionario Actual</h3>
+    <table id="tablaPalabras" class="table">
+        <thead>
+            <tr>
+                <th>Inglés</th>
+                <th>Español</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se llenarán las filas de la tabla con los datos -->
+        </tbody>
+    </table>
+</div>
+
+<br />
+<br />
+<div>
+    @Html.ActionLink("Buscar una traducción", "Traducir")
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function mostrarTabla()
+    {
+        //Boton
+        var btnm = document.getElementById("mostrar");
+        btnm.style.display = "none";
+
+        var btno = document.getElementById("ocultar");
+        btno.style.display = "";
+
+        // Solicitud AJAX
+        $.ajax({
+            url: '@Url.Action("MostrarTabla", "Diccionario")',
+            type: 'GET',
+            success: function (data) {
+                document.getElementById("container").style.display = "block";
+
+                // Limpiar la tabla
+                $("#tablaPalabras tbody").empty();
+
+                // Llenar la tabla 
+                data.forEach(function (item) {
+                    var palabras = item.split(",")
+                    var fila = "<tr><td>" + palabras[0] + "</td><td>" + palabras[1] + "</td></tr>";
+                    $("#tablaPalabras tbody").append(fila);
+                });
+            }
+        });
+    }
+
+    function ocultarTabla()
+    {
+        var btnm = document.getElementById("mostrar");
+        btnm.style.display = "";
+
+        var btno = document.getElementById("ocultar");
+        btno.style.display = "none";
+
+        var tabla = document.getElementById("container");
+        tabla.style.display = "none";
+    }
+
+</script>
