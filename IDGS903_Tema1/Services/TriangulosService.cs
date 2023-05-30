@@ -12,42 +12,63 @@ namespace IDGS903_Tema1.Services
     {
         public Triangulos ClasificarTriangulo(Triangulos triangulos)
         {
-            double distanciaAB = Math.Sqrt(Math.Pow((triangulos.BX - triangulos.AX), 2)
-                + Math.Pow((triangulos.BY - triangulos.AY), 2));
+            double distanciaAB = Math.Round(Math.Sqrt(Math.Pow((triangulos.BX - triangulos.AX), 2)
+                + Math.Pow((triangulos.BY - triangulos.AY), 2)));
 
-            double distanciaBC = Math.Sqrt(Math.Pow((triangulos.BX - triangulos.CX), 2)
-                + Math.Pow((triangulos.BY - triangulos.CY), 2));
+            double distanciaBC = Math.Round(Math.Sqrt(Math.Pow((triangulos.BX - triangulos.CX), 2)
+                + Math.Pow((triangulos.BY - triangulos.CY), 2)));
 
-            double distanciaCA = Math.Sqrt(Math.Pow((triangulos.AX - triangulos.CX), 2)
-                + Math.Pow((triangulos.AY - triangulos.CY), 2));
+            double distanciaCA = Math.Round(Math.Sqrt(Math.Pow((triangulos.AX - triangulos.CX), 2)
+                + Math.Pow((triangulos.AY - triangulos.CY), 2)));
 
-            //distanciaAB mayor
-            if (distanciaAB >= distanciaBC && distanciaAB >= distanciaCA && distanciaAB < (distanciaBC + distanciaCA))
+            //VALIDACION
+            if (distanciaAB < (distanciaBC + distanciaCA) && distanciaBC < (distanciaAB + distanciaCA) && distanciaCA < (distanciaBC + distanciaAB))
             {
-                triangulos.Triangulo = EscogerTipo(distanciaAB, distanciaBC, distanciaCA);
-                triangulos.Area = CalcularArea(distanciaAB, distanciaBC, distanciaCA);
-
+                if (Validacion(triangulos.AX, triangulos.AY, triangulos.BX, triangulos.BY, triangulos.CX, triangulos.CY))
+                {
+                    triangulos.Triangulo = EscogerTipo(distanciaAB, distanciaBC, distanciaCA);
+                    triangulos.Area = CalcularArea(distanciaAB, distanciaBC, distanciaCA);
+                }
+                else
+                {
+                    triangulos.Triangulo = "Los puntos ingresados probablemente es una recta";
+                    triangulos.Area = 0;
+                }
+                
             }
-
-            //distanciaBC mayor
-            else if (distanciaBC >= distanciaAB && distanciaBC >= distanciaCA && distanciaBC < (distanciaAB + distanciaCA))
-            {
-                triangulos.Triangulo = EscogerTipo(distanciaAB, distanciaBC, distanciaCA);
-                triangulos.Area = CalcularArea(distanciaAB, distanciaBC, distanciaCA);
-            }
-
-            //distanciaCA mayor
-            else if (distanciaCA >= distanciaAB && distanciaCA >= distanciaBC && distanciaCA < (distanciaAB + distanciaBC))
-            {
-                triangulos.Triangulo = EscogerTipo(distanciaAB, distanciaBC, distanciaCA);
-                triangulos.Area = CalcularArea(distanciaAB, distanciaBC, distanciaCA);
-            }
-
             else
             {
                 triangulos.Triangulo = "Los puntos ingresados no forman un triángulo";
                 triangulos.Area = 0;
             }
+
+            //distanciaAB mayor
+            //if (distanciaAB >= distanciaBC && distanciaAB >= distanciaCA && distanciaAB < (distanciaBC + distanciaCA))
+            //{
+            //    triangulos.Triangulo = EscogerTipo(distanciaAB, distanciaBC, distanciaCA);
+            //    triangulos.Area = CalcularArea(distanciaAB, distanciaBC, distanciaCA);
+
+            //}
+
+            ////distanciaBC mayor
+            //else if (distanciaBC >= distanciaAB && distanciaBC >= distanciaCA && distanciaBC < (distanciaAB + distanciaCA))
+            //{
+            //    triangulos.Triangulo = EscogerTipo(distanciaAB, distanciaBC, distanciaCA);
+            //    triangulos.Area = CalcularArea(distanciaAB, distanciaBC, distanciaCA);
+            //}
+
+            ////distanciaCA mayor
+            //else if (distanciaCA >= distanciaAB && distanciaCA >= distanciaBC && distanciaCA < (distanciaAB + distanciaBC))
+            //{
+            //    triangulos.Triangulo = EscogerTipo(distanciaAB, distanciaBC, distanciaCA);
+            //    triangulos.Area = CalcularArea(distanciaAB, distanciaBC, distanciaCA);
+            //}
+
+            //else
+            //{
+            //    triangulos.Triangulo = "Los puntos ingresados no forman un triángulo";
+            //    triangulos.Area = 0;
+            //}
 
             return triangulos;
         }
@@ -66,17 +87,7 @@ namespace IDGS903_Tema1.Services
                 tipo = "Escaleno";
             }
 
-            if (AB == CA && CA != BC)
-            {
-                tipo = "Isóceles";
-            }
-
-            if (AB == BC && BC != CA)
-            {
-                tipo = "Isóceles";
-            }
-
-            if (CA == BC && BC != AB)
+            if ((AB == CA && CA != BC )|| (AB == BC && BC != CA) || (CA == BC && BC != AB))
             {
                 tipo = "Isóceles";
             }
@@ -92,6 +103,21 @@ namespace IDGS903_Tema1.Services
             area = Math.Sqrt(s*(s-AB)*(s-BC)*(s-CA));
 
             return Math.Round(area,5);
+        }
+
+        private bool Validacion(float AX, float AY, float BX, float BY, float CX, float CY)
+        {
+            double pendienteAB = (BY - AY)/(BX - AX);
+            double pendienteAC = (CY - AY)/(CX - AX);
+
+            if (pendienteAB != pendienteAC)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
